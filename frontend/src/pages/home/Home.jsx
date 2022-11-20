@@ -1,73 +1,85 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
-import LayoutApp from '../../components/Layout'
-import { Row, Col } from 'antd';
-import Product from '../../components/Product';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import LayoutApp from "../../components/Layout";
+import { Row, Col } from "antd";
+import Product from "../../components/Product";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
-
   const dispatch = useDispatch();
 
   const [productData, setProductData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('pizzas');
+  const [selectedCategory, setSelectedCategory] = useState("Shirts");
   const categories = [
     {
-      name: "pizzas",
-      imageUrl: "https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/27954/pizza-pepperoni-clipart-xl.png",
+      name: "Shirts",
+      imageUrl:
+        "https://png.pngtree.com/png-clipart/20190906/original/pngtree-summer-shirt-short-sleeve-png-image_4557073.jpg",
     },
     {
-      name: "burgers",
-      imageUrl: "https://cdn.pixabay.com/photo/2022/01/04/23/00/fast-food-6916101_960_720.png",
+      name: "Tshirts",
+      imageUrl:
+        "https://www.pngfind.com/pngs/m/29-298041_clipart-info-transparent-t-shirt-clip-art-hd.png",
     },
     {
-      name: "drinks",
-      imageUrl: "https://images.vexels.com/media/users/3/246333/isolated/preview/9626dce3278f72220ea2736de64e6233-pink-cocktail-color-stroke.png",
+      name: "Blazers",
+      imageUrl:
+        "https://png.pngtree.com/png-clipart/20190904/original/pngtree-red-hand-painted-blazer-png-image_4477740.jpg",
     },
-
-  ]
+  ];
 
   useEffect(() => {
     const getAllProducts = async () => {
-        try {
-          dispatch({
-            type: "SHOW_LOADING",
-          });
-          const {data} = await axios.get('/api/products/getproducts');
-          setProductData(data);
-          dispatch({
-            type: "HIDE_LOADING",
-          });
-          console.log(data);
+      try {
+        dispatch({
+          type: "SHOW_LOADING",
+        });
+        const { data } = await axios.get("/api/products/getproducts");
+        setProductData(data);
+        dispatch({
+          type: "HIDE_LOADING",
+        });
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-        } catch(error) {
-          console.log(error);
-        }
-      };
-
-      getAllProducts();
+    getAllProducts();
   }, [dispatch]);
-  
 
   return (
     <LayoutApp>
       <div className="category">
         {categories.map((category) => (
-          <div key={category.name} className={`categoryFlex ${selectedCategory === category.name && 'category-active'}`} onClick={() => setSelectedCategory(category.name)}>
+          <div
+            key={category.name}
+            className={`categoryFlex ${
+              selectedCategory === category.name && "category-active"
+            }`}
+            onClick={() => setSelectedCategory(category.name)}
+          >
             <h3 className="categoryName">{category.name}</h3>
-            <img src={category.imageUrl} alt={category.name} height={60} width={60} />
+            <img
+              src={category.imageUrl}
+              alt={category.name}
+              height={60}
+              width={60}
+            />
           </div>
         ))}
       </div>
       <Row>
-        {productData.filter((i) => i.category === selectedCategory).map((product) => (
-          <Col xs={24} sm={6} md={12} lg={6}>
-            <Product key={product.id} product={product} />
-          </Col>
-        ))}
+        {productData
+          .filter((i) => i.category === selectedCategory)
+          .map((product) => (
+            <Col xs={24} sm={6} md={12} lg={6}>
+              <Product key={product.id} product={product} />
+            </Col>
+          ))}
       </Row>
     </LayoutApp>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

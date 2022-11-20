@@ -15,7 +15,7 @@ const Product = ({ product }) => {
         <img alt={product.name} src={product.image} style={{ height: 200 }} />
       }
     >
-      <Meta title={product.name} description={`$${product.price}`} />
+      <Meta title={product.name} description={`Rs${product.price}`} />
     </Card>
   );
 };
